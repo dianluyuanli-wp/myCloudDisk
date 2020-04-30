@@ -1,5 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     context: path.resolve(__dirname),
@@ -25,12 +26,15 @@ module.exports = {
             },
         },
     },
-    // plugins: [
-    //     new MiniCssExtractPlugin({      //对css进行打包，webpack4推荐语法
-    //         filename: "[name].css",
-    //         chunkFilename: "[name].css"
-    //     })
-    // ],
+    plugins: [
+        new MiniCssExtractPlugin({      //对css进行打包，webpack4推荐语法
+            filename: "[name].css",
+            chunkFilename: "[name].css"
+        }),
+        // new BundleAnalyzerPlugin({
+        //     analyzerPort: 8899
+        // })
+    ],
     module: {
         rules: [
             {
@@ -45,6 +49,12 @@ module.exports = {
                                 '@babel/preset-env'
                             ],
                             plugins: [
+                                //  给antd做按需加载
+                                ["import", {
+                                    "libraryName": "antd",
+                                    "libraryDirectory": "es",
+                                    "style": "css" // `style: true` 会加载 less 文件
+                                }],
                                 //  这个拿来做注入代码优化的
                                 ['@babel/plugin-transform-runtime',
                                 {
@@ -62,12 +72,21 @@ module.exports = {
             },
             {
                 test: /\.(css|scss)$/,
+                exclude: /node_modules/,
                 use: [
                     'isomorphic-style-loader',
                     //  MiniCssExtractPlugin.loader,  //自动提取出css
                     'css-loader?modules&localIdentName=[name]__[local]--[hash:base64:5]',
-
                 ]
+            },
+            {
+                //  专门处理antd的css样式
+                test: /\.css$/,
+                include: /node_modules/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader'
+                ],
             },
         ]
     },

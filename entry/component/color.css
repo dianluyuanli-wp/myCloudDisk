@@ -1,3 +1,17 @@
 .color {
     color: red;
 }
+
+.layout {
+    height: 100%;
+}
+
+.title {
+    color: #fff;
+}
+
+.siteLayoutContent {
+    background: #fff;
+    padding: 24px;
+    min-height: 280px;
+}

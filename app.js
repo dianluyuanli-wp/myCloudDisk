@@ -4,10 +4,12 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
+var compression = require('compression');
 
 var indexRouter = require('./router');
 
 var app = express();
+app.use(compression());
 var ejs = require('ejs');
 
 // view engine setup

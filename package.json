@@ -5,29 +5,32 @@
         "start": "node ./bin/start",
         "dev": "nodemon ./bin/start",
         "build": "webpack --color --config webpack.config.js",
-        "sBuild": "webpack --color --config webpack.server.config.js",
         "rx": "babel-node ./bin/start",
         "wh": "node ./dist/"
     },
     "dependencies": {
-        "http-errors": "^1.6.2",
-        "express": "^4.16.4",
-        "morgan": "^1.9.1",
-        "ejs": "^2.4.1",
-        "react": "^16.8.3",
-        "react-dom": "^16.8.3",
         "@babel/core": "^7.3.4",
         "@babel/preset-env": "^7.3.4",
-        "isomorphic-style-loader": "^5.1.0"
+        "antd": "^4.2.0",
+        "compression": "^1.7.4",
+        "ejs": "^2.4.1",
+        "express": "^4.16.4",
+        "http-errors": "^1.6.2",
+        "isomorphic-style-loader": "^5.1.0",
+        "morgan": "^1.9.1",
+        "react": "^16.8.3",
+        "react-dom": "^16.8.3"
     },
     "devDependencies": {
         "@babel/plugin-proposal-class-properties": "^7.8.3",
         "@babel/plugin-transform-runtime": "^7.3.4",
         "@babel/preset-react": "^7.0.0",
         "babel-loader": "^8.0.6",
+        "babel-plugin-import": "^1.13.0",
         "css-loader": "^0.28.11",
         "mini-css-extract-plugin": "^0.4.5",
         "webpack": "^4.29.6",
+        "webpack-bundle-analyzer": "^3.7.0",
         "webpack-cli": "^3.2.3"
     }
 }
