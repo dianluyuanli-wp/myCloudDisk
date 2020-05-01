@@ -5,7 +5,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 module.exports = {
     context: path.resolve(__dirname),
     entry: {
-        app: ['./entry/index.js']
+        app: ['./entry/index.tsx']
     },
     output: {
         filename: '[name].bundle.js',
@@ -76,18 +76,48 @@ module.exports = {
                 use: [
                     'isomorphic-style-loader',
                     //  MiniCssExtractPlugin.loader,  //自动提取出css
-                    'css-loader?modules&localIdentName=[name]__[local]--[hash:base64:5]',
+                    //  'css-loader?modules&localIdentName=[name]__[local]--[hash:base64:5]',
+                    {
+                        loader: 'typings-for-css-modules-loader',
+                        options: {
+                            modules: true,
+                            namedExport: true
+                        }
+                    }
                 ]
             },
             {
                 //  专门处理antd的css样式
-                test: /\.css$/,
+                test: /\.(css|less)$/,
                 include: /node_modules/,
                 use: [
-                    MiniCssExtractPlugin.loader,
-                    'css-loader'
+                    //MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    // {
+                    //     loader: 'typings-for-css-modules-loader',
+                    //     // options: {
+                    //     //     modules: true,
+                    //     //     namedExport: true
+                    //     // }
+                    // }
                 ],
             },
+            {
+                test: /\.tsx?$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader!awesome-typescript-loader',
+            }
+        ]
+    },
+    resolve: {
+        alias: {
+            // '@apiMap': path.resolve(__dirname, 'map/api.tsx'),
+            // '@constants': path.resolve(__dirname, 'constants'),
+            // '@utils': path.resolve(__dirname, 'utils'),
+            // '@UI': path.resolve(__dirname, 'UIwidgets')
+        },
+        extensions: [
+            '.ts', '.tsx', '.js', '.json'
         ]
     },
     //  mode:"development",

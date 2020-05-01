@@ -3,7 +3,8 @@ import ReactDom from 'react-dom';
 import Com from './component';
 import StyleContext from 'isomorphic-style-loader/StyleContext';
 
-const insertCss = (...styles) => {
+//  : any[]
+const insertCss = (...styles: any[]) => {
     const removeCss = styles.map(style => style._insertCss())
     return () => removeCss.forEach(dispose => dispose())
   }

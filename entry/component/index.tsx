@@ -1,5 +1,6 @@
 import React from 'react';
-import s from './color.css';
+//  import s from './color.css';
+import * as s from './color.css';
 import withStyles from 'isomorphic-style-loader/withStyles';
 import { Layout, Upload, Card, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
@@ -13,9 +14,9 @@ const { Header, Content, Footer } = Layout;
 // }
 // export default ShowComponent;
 
-
+//c
 //  传统写法
-function ShowComponent(props, context) {
+function ShowComponent() {
     return (
         <Layout className={s.layout}>
             <Header>
