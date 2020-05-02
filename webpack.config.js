@@ -1,5 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const tsImportPluginFactory = require("ts-import-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
@@ -37,46 +38,44 @@ module.exports = {
     ],
     module: {
         rules: [
-            {
-                test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
-                use: [
-                    {
-                        loader: 'babel-loader',
-                        query: {
-                            presets: [
-                                '@babel/react', 
-                                '@babel/preset-env'
-                            ],
-                            plugins: [
-                                //  给antd做按需加载
-                                ["import", {
-                                    "libraryName": "antd",
-                                    "libraryDirectory": "es",
-                                    "style": "css" // `style: true` 会加载 less 文件
-                                }],
-                                //  这个拿来做注入代码优化的
-                                ['@babel/plugin-transform-runtime',
-                                {
-                                    "corejs": false,
-                                    "helpers": true,
-                                    "regenerator": true,
-                                    "useESModules": false
-                                }],
-                                //  支持类写法
-                                "@babel/plugin-proposal-class-properties"
-                            ]
-                        }
-                    }
-                ]
-            },
+            // {
+            //     test: /\.(js|jsx)$/,
+            //     exclude: /node_modules/,
+            //     use: [
+            //         {
+            //             loader: 'babel-loader',
+            //             query: {
+            //                 presets: [
+            //                     '@babel/react', 
+            //                     '@babel/preset-env'
+            //                 ],
+            //                 plugins: [
+            //                     //  给antd做按需加载
+            //                     ["import", {
+            //                         "libraryName": "antd",
+            //                         //"libraryDirectory": "es",
+            //                         "style": 'css' // `style: true` 会加载 less 文件
+            //                     }],
+            //                     //  这个拿来做注入代码优化的
+            //                     ['@babel/plugin-transform-runtime',
+            //                     {
+            //                         "corejs": false,
+            //                         "helpers": true,
+            //                         "regenerator": true,
+            //                         "useESModules": false
+            //                     }],
+            //                     //  支持类写法
+            //                     "@babel/plugin-proposal-class-properties"
+            //                 ]
+            //             }
+            //         }
+            //     ]
+            // },
             {
                 test: /\.(css|scss)$/,
                 exclude: /node_modules/,
                 use: [
                     'isomorphic-style-loader',
-                    //  MiniCssExtractPlugin.loader,  //自动提取出css
-                    //  'css-loader?modules&localIdentName=[name]__[local]--[hash:base64:5]',
                     {
                         loader: 'typings-for-css-modules-loader',
                         options: {
@@ -88,25 +87,39 @@ module.exports = {
             },
             {
                 //  专门处理antd的css样式
-                test: /\.(css|less)$/,
+                test: /\.(less)$/,
                 include: /node_modules/,
                 use: [
-                    //MiniCssExtractPlugin.loader,
+                    MiniCssExtractPlugin.loader,
                     'css-loader',
-                    // {
-                    //     loader: 'typings-for-css-modules-loader',
-                    //     // options: {
-                    //     //     modules: true,
-                    //     //     namedExport: true
-                    //     // }
-                    // }
+                    {
+                        loader: "less-loader",
+                        options: {
+                            lessOptions: {
+                                javascriptEnabled: true
+                            }
+                        }
+                    }
                 ],
             },
             {
                 test: /\.tsx?$/,
-                exclude: /node_modules/,
-                loader: 'babel-loader!awesome-typescript-loader',
-            }
+                loader: "awesome-typescript-loader",
+                options: {
+                  useCache: true,
+                  useBabel: false, // !important!
+                  getCustomTransformers: () => ({
+                    before: [tsImportPluginFactory({
+                      libraryName: 'antd',
+                      libraryDirectory: 'lib',
+                      style: true
+                    })]
+                  }),
+                },
+                exclude: [
+                    /node_modules/
+                ]
+              }
         ]
     },
     resolve: {
