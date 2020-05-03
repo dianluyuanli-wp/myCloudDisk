@@ -27,6 +27,29 @@ function ShowComponent() {
         test();
     }, []);
     console.log('wefwef')
+
+    async function handleChange(info: UploadChangeParam<UploadFile<any>>) {
+        const { fileList: newFileList, file } = info;
+        if (file.status === 'removed') {
+          setFileList(newFileList);
+          return;
+        }
+        const ans = await upload(info);
+        if (ans.errmsg === 'ok') {
+          message.success(`${info.file.name} 上传成功。`);
+        } else {
+          message.error(`${info.file.name} 上传失败。`);
+          return;
+        }
+        setFileList(
+          newFileList.map(item => {
+            if (item.name === file.name) {
+              return Object.assign(item, { status: 'done', url: ans.file_list[0].download_url });
+            }
+            return item;
+          }),
+        );
+      }
     return (
         <Layout className={s.layout}>
             <Header>
@@ -34,7 +57,10 @@ function ShowComponent() {
             </Header>
             <Content style={{ padding: '50px 50px' }}>
                 <div className={s.siteLayoutContent}>
-                    <Upload>
+                    <Upload
+                        
+                        onChange={handleChange}
+                    >
                         <Button>
                             <UploadOutlined /> Click to Upload
                         </Button>
