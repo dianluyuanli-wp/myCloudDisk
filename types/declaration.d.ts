@@ -4,3 +4,4 @@
 // }
 
 //declare module 'moment'
+declare module 'xiaohuli-package';
