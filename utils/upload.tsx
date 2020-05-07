@@ -1,6 +1,6 @@
 import {UploadFile, UploadChangeParam } from 'antd/lib/upload/interface';
 //  import { reqPost, purePost } from '@/services/commonUtils';
-import { post } from '@utils/api';
+import { post, apiMap, request, host } from '@utils/api';
 
 const SIZE = 1 * 1024 * 1024; // 切片大小
 
@@ -27,12 +27,20 @@ export function getBase64(file: File | Blob): Promise<string> {
   });
 }
 
+interface FileObj extends File {
+    name: string;
+}
+
 export async function uploadFile(params: FormData) {
-    return post('uploadFile', params);
+    return request(host + apiMap.UPLOAD_FILE_SLICE, {
+        method: 'post',
+        data: params,
+    });
+    //  return post(apiMap.UPLOAD_FILE_SLICE, params);
 }
 
 export async function fileMergeReq(name: string) {
-    return post('fileMergeReq', { fileName: name, size: SIZE });
+    return post(apiMap.MERGE_SLICE, { fileName: name, size: SIZE });
 }
 
 export async function upload(info: UploadChangeParam<UploadFile<any>>) {
@@ -40,7 +48,7 @@ export async function upload(info: UploadChangeParam<UploadFile<any>>) {
     if (!info.file.originFileObj) {
         return '';
     }
-    const { name: filename } = info.file.originFileObj;
+    const { name: filename } = info.file.originFileObj as FileObj;
     const dataPkg = fileList.map(({ file }, index) => ({
         chunk: file,
         hash: `${filename}-${index}` // 文件名 + 数组下标
