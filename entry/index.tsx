@@ -17,7 +17,7 @@ const mountNode = document.getElementById('main');
 //     <Com />
 // ),mountNode);
 
-ReactDom.hydrate(
+ReactDom.render(
     <StyleContext.Provider value={{ insertCss }}>
       <Com />
     </StyleContext.Provider>,

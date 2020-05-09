@@ -4,7 +4,9 @@ import { extend } from 'umi-request';
 export const apiMap = {
     TEST: 'test',
     UPLOAD_FILE_SLICE: 'uploadFile',
-    MERGE_SLICE: 'fileMergeReq'
+    MERGE_SLICE: 'fileMergeReq',
+    QUERY_LIST: 'queryFileList',
+    DELETE_FILE: 'deleteFile'
 }
 
 const localHost = 'http://localhost:4000/api/';

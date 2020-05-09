@@ -133,6 +133,6 @@ module.exports = {
             '.ts', '.tsx', '.js', '.json'
         ]
     },
-    //  mode:"development",
-    mode:"production",
+    mode:"development",
+    //  mode:"production",
 }

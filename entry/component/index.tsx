@@ -1,34 +1,53 @@
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import * as s from './color.css';
 import withStyles from 'isomorphic-style-loader/withStyles';
-import { Layout, Upload, Card, Button, message } from 'antd';
+import { Layout, Upload, Card, Button, message, Table } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { post, apiMap } from '@utils/api';
 import { upload } from '@utils/upload';
 import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface';
 import { download } from '@utils/down';
+import { usePageManager, getQueryString, SINGLE_PAGE_SIZE } from '@utils/commonTools';
+import { fileObj, parseList, columns, FileListAction } from './accessory';
 const { Header, Content, Footer } = Layout;
 
-//  react hooks 写法
-// const ShowComponent = () => {
-//     useStyles(s);
-//     return <div className={s.color}>英雄的中国人民万岁万岁！</div>
-// }
-// export default ShowComponent;
-
-//大家好
-//  传统写法
 function ShowComponent() {
-    useEffect(() => {
-        const test = async function() {
-            const res = await post(apiMap.TEST, {});
-            console.log(res);
+    const [pageObj, setPage] = usePageManager();
+    const [chekcList, setCheckList] = useState([]);
+
+    function listReducer(state: Array<fileObj>, action: FileListAction): Array<fileObj> {
+        const fileUpdate = () => {
+            // eslint-disable-next-line no-underscore-dangle
+            const index = state.findIndex(item => item._id === action.payload._id);
+            if (index >= 0) {
+                const target = state[index];
+                target.timeStamp = action.payload.timeStamp;
+                return [...state.slice(0, index), target, ...state.slice(index + 1)];
+            } else {
+                return (action?.payload ? [action.payload] : []).concat([...state])
+            }
+        }
+        const actionMap = {
+          init: () => action?.list || [],
+          update: fileUpdate,
+          delete: () => state.filter(item => action.keys.findIndex(sitem => sitem ===item._id) === -1)
         };
-        console.log(12222)
-        test();
+        return actionMap[action.type]();
+      }
+    const [fileList, setFList] = useReducer(listReducer, []);
+
+    useEffect(() => {
+        const initList = async function() {
+            const res = await post(apiMap.QUERY_LIST, {
+                queryString: getQueryString(1)
+            });
+            const list = parseList(res);
+            setPage({ total: res.pager.Total });
+            setFList({ type: 'init', list })
+        };
+        initList();
     }, []);
-    console.log('wefwef')
 
     async function handleChange(info: UploadChangeParam<UploadFile<any>>) {
         const { fileList: newFileList, file } = info;
@@ -38,33 +57,43 @@ function ShowComponent() {
         //   return;
         // }
         const ans = await upload(info);
-        if (ans.errmsg === 'ok') {
-          message.success(`${info.file.name} 上传成功。`);
+        const { fileData = {}, isNew } = ans;
+        if (fileData.fileName) {
+            setFList({ type: 'update', payload: Object.assign(fileData, { key: fileData._id }) });
+            message.success(`${info.file.name} 上传成功。`);
         } else {
           message.error(`${info.file.name} 上传失败。`);
           return;
         }
-        // setFileList(
-        //   newFileList.map(item => {
-        //     if (item.name === file.name) {
-        //       return Object.assign(item, { status: 'done', url: ans.file_list[0].download_url });
-        //     }
-        //     return item;
-        //   }),
-        // );
       }
-    function downloadFile(fileName, content){
-        var aLink = document.createElement('a');
-        var blob = new Blob([content]);
-        var evt = document.createEvent("HTMLEvents");
-        evt.initEvent("click", false, false);//initEvent 不加后两个参数在FF下会报错, 感谢 Barret Lee 的反馈
-        aLink.download = fileName;
-        aLink.href = URL.createObjectURL(blob);
-        aLink.dispatchEvent(evt);
-    }
     function download11() {
         download('https://7465-test-container-ojiv6-1301135971.tcb.qcloud.la/狗.jpg');
-      };
+    };
+    async function detail(page: number) {
+        const res = await post(apiMap.QUERY_LIST, {
+            queryString: getQueryString(page)
+        });
+        const showList = parseList(res);
+        setPage({ current: page, total: res.pager.Total });
+        setFList({ type: 'init', list: showList });
+    }
+
+    async function deleteFile() {
+        const deleteList = fileList.filter(item => chekcList.findIndex(sitem => item._id === sitem) >= 0)
+            .map(item => item.fileId);
+        await post(apiMap.DELETE_FILE, {
+            deleteFileList: deleteList
+        });
+        setFList({ type: 'delete', keys: chekcList });
+        console.log(chekcList, '1111fe');
+    }
+
+    const paginaConfig = {
+        onChange: detail,
+        total: pageObj.total,
+        current: pageObj.current,
+        pageSize: SINGLE_PAGE_SIZE,
+    };
     return (
         <Layout className={s.layout}>
             <Header>
@@ -81,9 +110,19 @@ function ShowComponent() {
                             <UploadOutlined /> Click to Upload
                         </Button>
                     </Upload>
+                    <Button onClick={deleteFile} type='dashed'>删除</Button>
                     <Card><a target="_blank" download ='11111' href='https://7465-test-container-ojiv6-1301135971.tcb.qcloud.la/特惠倒计时.zip'>大家好</a>
                         <div onClick={download11}>来来阿狸</div>
                     </Card>
+                    <Table
+                        rowSelection={{
+                            type: 'checkbox',
+                            onChange: (selectedRowKeys, selectedRows) => {
+                                setCheckList(selectedRowKeys);
+                                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                            },
+                        }}
+                        pagination={paginaConfig} columns={columns} dataSource={fileList} />
                 </div>
             </Content>
             <Footer style={{ textAlign: 'center' }}>Produced by 广兰路地铁</Footer>
