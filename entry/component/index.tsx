@@ -52,10 +52,6 @@ function ShowComponent() {
     async function handleChange(info: UploadChangeParam<UploadFile<any>>) {
         const { fileList: newFileList, file } = info;
         console.log(info);
-        // if (file.status === 'removed') {
-        //   setFileList(newFileList);
-        //   return;
-        // }
         const ans = await upload(info);
         const { fileData = {}, isNew } = ans;
         if (fileData.fileName) {
@@ -66,9 +62,7 @@ function ShowComponent() {
           return;
         }
       }
-    function download11() {
-        download('https://7465-test-container-ojiv6-1301135971.tcb.qcloud.la/狗.jpg');
-    };
+
     async function detail(page: number) {
         const res = await post(apiMap.QUERY_LIST, {
             queryString: getQueryString(page)
@@ -85,7 +79,11 @@ function ShowComponent() {
             deleteFileList: deleteList
         });
         setFList({ type: 'delete', keys: chekcList });
-        console.log(chekcList, '1111fe');
+    }
+
+    async function downloadFile() {
+        fileList.filter(item => chekcList.findIndex(sitem => item._id === sitem) >= 0)
+        .map(item => item.downloadUrl).map(item => download(item));
     }
 
     const paginaConfig = {
@@ -97,7 +95,7 @@ function ShowComponent() {
     return (
         <Layout className={s.layout}>
             <Header>
-                <div className={s.title}>自己09的网盘</div>
+                <div className={s.title}>自己的网盘</div>
             </Header>
             <Content style={{ padding: '50px 50px' }}>
                 <div className={s.siteLayoutContent}>
@@ -110,16 +108,13 @@ function ShowComponent() {
                             <UploadOutlined /> Click to Upload
                         </Button>
                     </Upload>
-                    <Button onClick={deleteFile} type='dashed'>删除</Button>
-                    <Card><a target="_blank" download ='11111' href='https://7465-test-container-ojiv6-1301135971.tcb.qcloud.la/特惠倒计时.zip'>大家好</a>
-                        <div onClick={download11}>来来阿狸</div>
-                    </Card>
+                    <Button className={s.deleteBtn} onClick={deleteFile} type='dashed'>删除</Button>
+                    <Button className={s.downLBtn} onClick={downloadFile} type='primary'>下载</Button>
                     <Table
                         rowSelection={{
                             type: 'checkbox',
                             onChange: (selectedRowKeys, selectedRows) => {
                                 setCheckList(selectedRowKeys);
-                                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                             },
                         }}
                         pagination={paginaConfig} columns={columns} dataSource={fileList} />

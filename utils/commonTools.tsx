@@ -37,5 +37,5 @@ export function getQueryString(pageNum: number) {
     ).replace(/"/g, '');
     //  这里要替换下，否则后台会理解为字符串而不是查询条件
     return `db.collection('fileList').where(${queryJsonString}).skip(${(pageNum - 1) *
-      SINGLE_PAGE_SIZE}).limit(${SINGLE_PAGE_SIZE}).get()`;
+      SINGLE_PAGE_SIZE}).limit(${SINGLE_PAGE_SIZE}).orderBy('timeStamp','desc').get()`;
 }

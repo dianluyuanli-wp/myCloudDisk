@@ -39,8 +39,8 @@ export async function uploadFile(params: FormData) {
     //  return post(apiMap.UPLOAD_FILE_SLICE, params);
 }
 
-export async function fileMergeReq(name: string) {
-    return post(apiMap.MERGE_SLICE, { fileName: name, size: SIZE });
+export async function fileMergeReq(name: string, fileSize: number) {
+    return post(apiMap.MERGE_SLICE, { fileName: name, size: SIZE, fileSize: fileSize });
 }
 
 export async function upload(info: UploadChangeParam<UploadFile<any>>) {
@@ -48,7 +48,7 @@ export async function upload(info: UploadChangeParam<UploadFile<any>>) {
     if (!info.file.originFileObj) {
         return '';
     }
-    const { name: filename } = info.file.originFileObj as FileObj;
+    const { name: filename, size: fileSize } = info.file.originFileObj as FileObj;
     const dataPkg = fileList.map(({ file }, index) => ({
         chunk: file,
         hash: `${filename}-${index}` // 文件名 + 数组下标
@@ -61,6 +61,6 @@ export async function upload(info: UploadChangeParam<UploadFile<any>>) {
         return formData
     }).map(item => uploadFile(item));
     await Promise.all(uploadReqList);
-    const ans = await fileMergeReq(filename);
+    const ans = await fileMergeReq(filename, fileSize);
     return ans;
 }
