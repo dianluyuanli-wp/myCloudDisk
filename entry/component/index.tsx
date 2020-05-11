@@ -52,15 +52,15 @@ function ShowComponent() {
     async function handleChange(info: UploadChangeParam<UploadFile<any>>) {
         const { fileList: newFileList, file } = info;
         console.log(info);
-        const ans = await upload(info);
-        const { fileData = {}, isNew } = ans;
-        if (fileData.fileName) {
-            setFList({ type: 'update', payload: Object.assign(fileData, { key: fileData._id }) });
-            message.success(`${info.file.name} 上传成功。`);
-        } else {
-          message.error(`${info.file.name} 上传失败。`);
-          return;
-        }
+        // const ans = await upload(info);
+        // const { fileData = {}, isNew } = ans;
+        // if (fileData.fileName) {
+        //     setFList({ type: 'update', payload: Object.assign(fileData, { key: fileData._id }) });
+        //     message.success(`${info.file.name} 上传成功。`);
+        // } else {
+        //   message.error(`${info.file.name} 上传失败。`);
+        //   return;
+        // }
       }
 
     async function detail(page: number) {
@@ -103,6 +103,7 @@ function ShowComponent() {
                         customRequest={() => {}}
                         onChange={handleChange}
                         showUploadList={false}
+                        multiple={true}
                     >
                         <Button>
                             <UploadOutlined /> Click to Upload
