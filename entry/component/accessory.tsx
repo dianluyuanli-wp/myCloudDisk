@@ -62,9 +62,9 @@ export const columns = [
       render: (text: string) => <ActionText text={text} />,
     },
     {
-      title: 'fileId',
-      dataIndex: 'fileId',
-      key: 'fileId',
+      title: 'downloadUrl',
+      dataIndex: 'downloadUrl',
+      key: 'downloadUrl',
     },
     {
         title: '文件大小',
