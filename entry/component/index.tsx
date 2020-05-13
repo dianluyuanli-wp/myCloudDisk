@@ -7,7 +7,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { post, apiMap } from '@utils/api';
 import { upload } from '@utils/upload';
 import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface';
-import { download } from '@utils/down';
+import { download, downloadUrlFile } from '@utils/down';
 import { usePageManager, getQueryString, SINGLE_PAGE_SIZE } from '@utils/commonTools';
 import { fileObj, parseList, columns, FileListAction } from './accessory';
 const { Header, Content, Footer } = Layout;
@@ -82,8 +82,20 @@ function ShowComponent() {
     }
 
     async function downloadFile() {
+        //  downloadUrlFile download
         fileList.filter(item => chekcList.findIndex(sitem => item._id === sitem) >= 0)
-        .map(item => item.downloadUrl).map(item => download(item));
+        .map(item => item.downloadUrl).map(item => {
+            try {
+                //  正常处理逻辑，图片文档等浏览器可直接识别的也是下载，但是对rar,zip等格式会报跨域错误
+                console.log(2222);
+                download(item)
+            } catch (e) {
+                //  处理那种跨域的问题的下载函数
+                console.log(111);
+                downloadUrlFile(item)
+            }
+            //  downloadUrlFile(item)
+        });
     }
 
     const paginaConfig = {
