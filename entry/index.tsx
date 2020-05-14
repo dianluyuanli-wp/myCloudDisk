@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import Com from './component';
+import Com from './component/content';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import StyleContext from 'isomorphic-style-loader/StyleContext';
 
 //  : any[]
@@ -19,7 +20,12 @@ const mountNode = document.getElementById('main');
 
 ReactDom.render(
     <StyleContext.Provider value={{ insertCss }}>
-      <Com />
+      {/* <Com /> */}
+      <Router>
+          <Route path='/' component={Com} />
+          {/* <Route path='/register.html' component={Register} />
+          <Route path='/home.html' component={Entry} /> */}
+      </Router>
     </StyleContext.Provider>,
     mountNode
 );

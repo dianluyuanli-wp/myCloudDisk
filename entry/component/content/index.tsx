@@ -53,7 +53,7 @@ function ShowComponent() {
         const { fileList: newFileList, file } = info;
         console.log(info);
         const ans = await upload(info);
-        const { fileData = {}, isNew } = ans;
+        const { fileData = {} } = ans;
         if (fileData.fileName) {
             setFList({ type: 'update', payload: Object.assign(fileData, { key: fileData._id }) });
             message.success(`${info.file.name} 上传成功。`);
@@ -82,19 +82,13 @@ function ShowComponent() {
     }
 
     async function downloadFile() {
-        //  downloadUrlFile download
         fileList.filter(item => chekcList.findIndex(sitem => item._id === sitem) >= 0)
         .map(item => item.downloadUrl).map(item => {
-            try {
-                //  正常处理逻辑，图片文档等浏览器可直接识别的也是下载，但是对rar,zip等格式会报跨域错误
-                console.log(2222);
-                download(item)
-            } catch (e) {
-                //  处理那种跨域的问题的下载函数
-                console.log(111);
+            const res = download(item);
+            if (res !== true) {
+                //  跨域错误无法捕获，如果返回不是true的话就走另外一个方法
                 downloadUrlFile(item)
             }
-            //  downloadUrlFile(item)
         });
     }
 

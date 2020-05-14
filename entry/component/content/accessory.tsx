@@ -1,5 +1,5 @@
 import React from 'react';
-import ActionText from '../../widgets/actionText';
+import ActionText from '@widgets/actionText';
 import moment from 'moment';
 
 export interface fileObj {

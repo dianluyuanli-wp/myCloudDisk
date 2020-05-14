@@ -15,7 +15,8 @@
           "@apiMap": [
               "map/api.tsx"
           ],
-          "@utils/*": ["utils/*"]
+          "@utils/*": ["utils/*"],
+          "@widgets/*": ["widgets/*"]
       },
     },
     "include": [

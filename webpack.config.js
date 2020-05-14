@@ -127,6 +127,7 @@ module.exports = {
             // '@apiMap': path.resolve(__dirname, 'map/api.tsx'),
             // '@constants': path.resolve(__dirname, 'constants'),
             '@utils': path.resolve(__dirname, 'utils'),
+            '@widgets': path.resolve(__dirname, 'widgets'),
             // '@UI': path.resolve(__dirname, 'UIwidgets')
         },
         extensions: [
