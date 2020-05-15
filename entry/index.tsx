@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import Com from './component/content';
+import Login from './component/login';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import StyleContext from 'isomorphic-style-loader/StyleContext';
 
@@ -22,7 +23,8 @@ ReactDom.render(
     <StyleContext.Provider value={{ insertCss }}>
       {/* <Com /> */}
       <Router>
-          <Route path='/' component={Com} />
+          <Route path='/login.html' component={Login} />
+          <Route path='/disk.html' component={Com} />
           {/* <Route path='/register.html' component={Register} />
           <Route path='/home.html' component={Entry} /> */}
       </Router>
