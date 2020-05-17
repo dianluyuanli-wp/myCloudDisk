@@ -4,7 +4,7 @@ import * as s from './color.css';
 import withStyles from 'isomorphic-style-loader/withStyles';
 import { Layout, Upload, Card, Button, message, Table } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { post, apiMap } from '@utils/api';
+import { reqPost as post, apiMap } from '@utils/api';
 import { upload } from '@utils/upload';
 import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface';
 import { download, downloadUrlFile } from '@utils/down';

@@ -60,7 +60,7 @@ qulifiedRequest.use(async (ctx, next) => {
             message: `请求错误 鉴权失败`,
             description: '鉴权失败,请重新登陆',
         });
-        setTimeout(() => window.location.href='/home.html', 2000,);
+        setTimeout(() => window.location.href='/login.html', 2000,);
     }
 });
 

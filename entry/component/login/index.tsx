@@ -2,31 +2,40 @@ import React, { useState } from 'react';
 import { useEffect, useReducer } from 'react';
 import * as s from './index.css';
 import withStyles from 'isomorphic-style-loader/withStyles';
-import { Layout, Upload, Card, Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import { post, apiMap } from '@utils/api';
-import { upload } from '@utils/upload';
-import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface';
-import { download, downloadUrlFile } from '@utils/down';
-import { usePageManager, getQueryString, SINGLE_PAGE_SIZE } from '@utils/commonTools';
 
 const FormItem = Form.Item;
 
 function Login() {
     const [secret, setSecret] = useState('');
 
-    const info = function(event: React.ChangeEvent<HTMLInputElement>) {
+    const info = async function(event: React.ChangeEvent<HTMLInputElement>) {
         setSecret(event.target.value);
-        console.log(event.target.value);
+    }
+
+    async function enter() {
+        const res = await post(apiMap.LOGIN, {
+            password: secret
+        });
+        if (res.verifyResult) {
+            localStorage.setItem('tk', res.accessToken);
+            window.location.href='/disk.html';
+        } else {
+            message.error('密码错误!');
+        }
     }
 
     return (
         <div className={s.bg}>
             <div className={s.title}>欢迎进入DIY云盘</div>
             <div className={s.wrapper}>
-                <FormItem className={s.input}>
-                    <Input onChange={info}/>
-                </FormItem>
-                <Button className={s.button} type='primary'>喊出口号</Button>
+                <Form >
+                    <FormItem className={s.input}>
+                        <Input.Password onChange={info}/>
+                    </FormItem>
+                </Form>
+                <Button className={s.button} onClick={enter} type='primary'>Submit</Button>
             </div>
 
         </div>
