@@ -20,6 +20,21 @@ export interface FileListAction {
     list?: Array<fileObj>;
 }
 
+export interface ProgressObj {
+    fileName: string,
+    fullChunks: number,
+    finishedChunks: number,
+}
+
+export interface ProgressAction {
+    type: 'add' | 'delete' | 'update';
+    fileName: string;
+    payload?: ProgressObj;
+    fullChunks?: number;
+    finishedChunks?: number;
+    list?: Array<ProgressObj>;
+}
+
 export function parseList(res: any): Array<fileObj> {
     return res.data
       .map((item: string): fileObj => JSON.parse(item))

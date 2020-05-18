@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useEffect, useReducer } from 'react';
 import * as s from './color.css';
 import withStyles from 'isomorphic-style-loader/withStyles';
-import { Layout, Upload, Card, Button, message, Table } from 'antd';
+import { Layout, Upload, Card, Button, message, Table, notification, Descriptions } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { reqPost as post, apiMap } from '@utils/api';
 import { upload } from '@utils/upload';
 import { UploadFile, UploadChangeParam } from 'antd/lib/upload/interface';
 import { download, downloadUrlFile } from '@utils/down';
 import { usePageManager, getQueryString, SINGLE_PAGE_SIZE } from '@utils/commonTools';
-import { fileObj, parseList, columns, FileListAction } from './accessory';
+import { fileObj, parseList, columns, FileListAction, ProgressObj, ProgressAction } from './accessory';
 const { Header, Content, Footer } = Layout;
 
 function ShowComponent() {
@@ -37,6 +37,30 @@ function ShowComponent() {
       }
     const [fileList, setFList] = useReducer(listReducer, []);
 
+    //  维护上传列表的进度条
+    function uploadProFunc(state: Array<ProgressObj>, action: ProgressAction): Array<ProgressObj> {
+        const progressUpdate = () => {
+            const index = state.findIndex(item => item.fileName === action.fileName);
+            if (index >= 0) {
+                const target = state[index];
+                // notification.open({
+                //     message: `${action.fileName}正在上传...`,
+                //     description: `当前进度${uploadProgressList.filter(item => item.fileName === )}`
+                // })
+                target.finishedChunks += action.finishedChunks;
+                return [...state.slice(0, index), target, ...state.slice(index + 1)];
+            } else {
+                return (action?.payload ? [action.payload] : []).concat([...state])
+            }
+        }
+        const actionMap = {
+            update: progressUpdate,
+            delete: () => state.filter(item => item.fileName !== action.fileName)
+        };
+        return actionMap[action.type]();
+    }
+    const [uploadProgressList, setUploadPL] = useReducer(uploadProFunc, []);
+
     useEffect(() => {
         const initList = async function() {
             const res = await post(apiMap.QUERY_LIST, {
@@ -52,7 +76,7 @@ function ShowComponent() {
     async function handleChange(info: UploadChangeParam<UploadFile<any>>) {
         const { fileList: newFileList, file } = info;
         console.log(info);
-        const ans = await upload(info);
+        const ans = await upload(info, setUploadPL);
         const { fileData = {} } = ans;
         if (fileData.fileName) {
             setFList({ type: 'update', payload: Object.assign(fileData, { key: fileData._id }) });
