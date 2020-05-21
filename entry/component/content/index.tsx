@@ -109,11 +109,16 @@ function ShowComponent() {
         fileList.filter(item => chekcList.findIndex(sitem => item._id === sitem) >= 0)
         .map(item => item.downloadUrl).map(item => {
             const res = download(item);
-            if (res !== true) {
-                //  跨域错误无法捕获，如果返回不是true的话就走另外一个方法
-                downloadUrlFile(item)
-            }
+            // if (res !== true) {
+            //     //  跨域错误无法捕获，如果返回不是true的话就走另外一个方法
+            //     downloadUrlFile(item)
+            // }
+            //  downloadUrlFile(item)
         });
+    }
+
+    function downTest() {
+        window.open('https://7465-test-container-ojiv6-1301135971.tcb.qcloud.la/putty-64bit-0.70-installer.msi');
     }
 
     const paginaConfig = {
@@ -142,6 +147,8 @@ function ShowComponent() {
                     </Upload>
                     <Button className={s.deleteBtn} onClick={deleteFile} type='dashed'>删除</Button>
                     <Button className={s.downLBtn} onClick={downloadFile} type='primary'>下载</Button>
+                    <a href="https://7465-test-container-ojiv6-1301135971.tcb.qcloud.la/狗.jpg" download="汇总.msi">点击下载</a>
+                    <Button className={s.downLBtn} onClick={downTest} type='primary'>测试</Button>
                     <Table
                         rowSelection={{
                             type: 'checkbox',

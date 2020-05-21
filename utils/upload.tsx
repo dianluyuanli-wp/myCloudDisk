@@ -70,8 +70,8 @@ export async function upload(info: UploadChangeParam<UploadFile<any>>, callBack:
         finishedChunks: 0
     } as ProgressObj;
     callBack({ type: 'update', fileName: filename, payload: initPro });
-    uploadReqList.map(item => uploadFile(item, filename, callBack));
-    await Promise.all(uploadReqList);
+    const promiseArr = uploadReqList.map(item => uploadFile(item, filename, callBack));
+    await Promise.all(promiseArr);
     const ans = await fileMergeReq(filename, fileSize);
     return ans;
 }

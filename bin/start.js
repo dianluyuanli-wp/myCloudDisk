@@ -20,7 +20,7 @@ const watching = compiler.watch({
   //  console.log(stats)
 })
 
-var port = normalizePort(process.env.PORT || '3001');
+var port = normalizePort(process.env.PORT || '3002');
 app.set('port', port);
 
 /**

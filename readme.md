@@ -19,7 +19,7 @@ npm run start
 
 浏览器打开：  
 client端渲染
-http://localhost:3001/
+http://localhost:3002/
 
 server端渲染
-http://localhost:3001/?useServer=1
+http://localhost:3002/?useServer=1
