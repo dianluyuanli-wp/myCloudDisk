@@ -23,3 +23,29 @@
 .downLBtn {
     margin-left: 15px;
 }
+
+.box {
+    margin-top: 15px;
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px #888888;;
+}
+
+.boxwrapper {
+    position: fixed;
+    z-index: 10;
+    right: 0;
+    top: 0;
+    padding-right: 15px;
+}
+
+.uploading {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.loadingW {
+    margin-right: 15px;
+}

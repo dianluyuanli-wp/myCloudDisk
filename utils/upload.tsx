@@ -38,9 +38,7 @@ export async function uploadFile(params: FormData, fileName: string, cb: React.D
         data: params,
     }).then(res => {
         cb({ type: 'update', fileName, finishedChunks: 1})
-        console.log('完成一片')
     });
-    //  return post(apiMap.UPLOAD_FILE_SLICE, params);
 }
 
 export async function fileMergeReq(name: string, fileSize: number) {
@@ -64,6 +62,7 @@ export async function upload(info: UploadChangeParam<UploadFile<any>>, callBack:
         formData.append('filename', filename);
         return formData
     });
+    //  创建文件上传对象
     const initPro = {     
         fileName: filename,
         fullChunks: uploadReqList.length,
@@ -73,5 +72,6 @@ export async function upload(info: UploadChangeParam<UploadFile<any>>, callBack:
     const promiseArr = uploadReqList.map(item => uploadFile(item, filename, callBack));
     await Promise.all(promiseArr);
     const ans = await fileMergeReq(filename, fileSize);
+    callBack({ type: 'delete', fileName: filename });
     return ans;
 }

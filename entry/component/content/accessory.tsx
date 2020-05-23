@@ -80,7 +80,6 @@ export const columns = [
       title: 'downloadUrl',
       dataIndex: 'downloadUrl',
       key: 'downloadUrl',
-      render: () => '我是马赛克，嘻嘻'
     },
     {
         title: '文件大小',

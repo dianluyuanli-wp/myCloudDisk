@@ -4,3 +4,7 @@ export const title: string;
 export const siteLayoutContent: string;
 export const deleteBtn: string;
 export const downLBtn: string;
+export const box: string;
+export const boxwrapper: string;
+export const uploading: string;
+export const loadingW: string;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useEffect, useReducer } from 'react';
 import * as s from './color.css';
 import withStyles from 'isomorphic-style-loader/withStyles';
-import { Layout, Upload, Card, Button, message, Table, notification, Descriptions } from 'antd';
+import { Layout, Upload, Card, Button, message, Table, Progress, Spin } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { reqPost as post, apiMap } from '@utils/api';
 import { upload } from '@utils/upload';
@@ -37,16 +37,14 @@ function ShowComponent() {
       }
     const [fileList, setFList] = useReducer(listReducer, []);
 
+    const [uploadProgressList, setUploadPL] = useReducer(uploadProFunc, []);
+
     //  维护上传列表的进度条
     function uploadProFunc(state: Array<ProgressObj>, action: ProgressAction): Array<ProgressObj> {
         const progressUpdate = () => {
             const index = state.findIndex(item => item.fileName === action.fileName);
             if (index >= 0) {
                 const target = state[index];
-                // notification.open({
-                //     message: `${action.fileName}正在上传...`,
-                //     description: `当前进度${uploadProgressList.filter(item => item.fileName === )}`
-                // })
                 target.finishedChunks += action.finishedChunks;
                 return [...state.slice(0, index), target, ...state.slice(index + 1)];
             } else {
@@ -59,8 +57,7 @@ function ShowComponent() {
         };
         return actionMap[action.type]();
     }
-    const [uploadProgressList, setUploadPL] = useReducer(uploadProFunc, []);
-
+    //  初始化内容
     useEffect(() => {
         const initList = async function() {
             const res = await post(apiMap.QUERY_LIST, {
@@ -75,7 +72,7 @@ function ShowComponent() {
 
     async function handleChange(info: UploadChangeParam<UploadFile<any>>) {
         const { fileList: newFileList, file } = info;
-        console.log(info);
+        //  console.log(info);
         const ans = await upload(info, setUploadPL);
         const { fileData = {} } = ans;
         if (fileData.fileName) {
@@ -105,20 +102,36 @@ function ShowComponent() {
         setFList({ type: 'delete', keys: chekcList });
     }
 
+    function getNotification() {
+        const statusList = uploadProgressList.map((item, index) => {
+            const { fileName, fullChunks, finishedChunks } = item;
+            const percent = finishedChunks / fullChunks;
+            return <div key={fileName} className={s.box}>
+                <div>正在上传:{fileName}</div>
+                <Progress percent={percent * 100} status="active"/>
+                {percent === 1 ? <div className={s.uploading}>
+                    <div className={s.loadingW}>正在等待服务器响应 </div>
+                    <Spin />
+                    </div>
+                : null}
+            </div>
+        })
+        return (
+            <div className={s.boxwrapper}>
+                {statusList}
+            </div>
+        )
+    }
+
     async function downloadFile() {
         fileList.filter(item => chekcList.findIndex(sitem => item._id === sitem) >= 0)
         .map(item => item.downloadUrl).map(item => {
             const res = download(item);
-            // if (res !== true) {
-            //     //  跨域错误无法捕获，如果返回不是true的话就走另外一个方法
-            //     downloadUrlFile(item)
-            // }
-            //  downloadUrlFile(item)
+            if (res !== true) {
+                //  跨域错误无法捕获，如果返回不是true的话就走另外一个方法
+                downloadUrlFile(item)
+            }
         });
-    }
-
-    function downTest() {
-        window.open('https://7465-test-container-ojiv6-1301135971.tcb.qcloud.la/putty-64bit-0.70-installer.msi');
     }
 
     const paginaConfig = {
@@ -132,6 +145,7 @@ function ShowComponent() {
             <Header>
                 <div className={s.title}>自己的网盘</div>
             </Header>
+            {getNotification()}
             <Content style={{ padding: '50px 50px' }}>
                 <div className={s.siteLayoutContent}>
                     <Upload
@@ -147,8 +161,6 @@ function ShowComponent() {
                     </Upload>
                     <Button className={s.deleteBtn} onClick={deleteFile} type='dashed'>删除</Button>
                     <Button className={s.downLBtn} onClick={downloadFile} type='primary'>下载</Button>
-                    <a href="https://7465-test-container-ojiv6-1301135971.tcb.qcloud.la/狗.jpg" download="汇总.msi">点击下载</a>
-                    <Button className={s.downLBtn} onClick={downTest} type='primary'>测试</Button>
                     <Table
                         rowSelection={{
                             type: 'checkbox',
