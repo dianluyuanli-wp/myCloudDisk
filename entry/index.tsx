@@ -21,12 +21,10 @@ const mountNode = document.getElementById('main');
 
 ReactDom.render(
     <StyleContext.Provider value={{ insertCss }}>
-      {/* <Com /> */}
       <Router>
           <Route path='/login.html' component={Login} />
           <Route path='/disk.html' component={Com} />
-          {/* <Route path='/register.html' component={Register} />
-          <Route path='/home.html' component={Entry} /> */}
+          <Route path='/' component={Login} />  
       </Router>
     </StyleContext.Provider>,
     mountNode
