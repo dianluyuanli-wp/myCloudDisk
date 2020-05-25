@@ -22,9 +22,9 @@ const mountNode = document.getElementById('main');
 ReactDom.render(
     <StyleContext.Provider value={{ insertCss }}>
       <Router>
-          <Route path='/login.html' component={Login} />
-          <Route path='/disk.html' component={Com} />
-          <Route path='/' component={Login} />  
+          <Route path='/cloudDisk/login.html' component={Login} />
+          <Route path='/cloudDisk/disk.html' component={Com} />
+          <Route path='/cloudDisk' component={Login} />  
       </Router>
     </StyleContext.Provider>,
     mountNode
