@@ -11,7 +11,7 @@ export const apiMap = {
     DELETE_FILE: 'deleteFile'
 }
 
-const localHost = 'http://localhost:4000/api/';
+const localHost = ENVIRONMENT === 'DEV' ? 'http://localhost:4000/api/' : 'http://149.129.83.246/api/';
 export const host = localHost;
 
 export const post = async function(apiName: string, props: object) {
@@ -60,7 +60,7 @@ qulifiedRequest.use(async (ctx, next) => {
             message: `请求错误 鉴权失败`,
             description: '鉴权失败,请重新登陆',
         });
-        setTimeout(() => window.location.href='/login.html', 2000,);
+        setTimeout(() => window.location.href='/cloudDisk/login.html', 2000,);
     }
 });
 

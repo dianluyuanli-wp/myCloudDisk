@@ -20,7 +20,7 @@ function Login() {
         });
         if (res.verifyResult) {
             localStorage.setItem('tk', res.accessToken);
-            window.location.href='/disk.html';
+            window.location.href='/cloudDisk/disk.html';
         } else {
             message.error('密码错误!');
         }

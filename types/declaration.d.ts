@@ -5,3 +5,4 @@
 
 //declare module 'moment'
 declare module 'xiaohuli-package';
+declare let ENVIRONMENT: 'DEV' | 'PRO';

@@ -1,6 +1,8 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const tsImportPluginFactory = require("ts-import-plugin");
+const { isDev } = require('./constants');
+const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
@@ -10,8 +12,8 @@ module.exports = {
     },
     output: {
         filename: '[name].bundle.js',
-        path: path.resolve(__dirname, 'dist'),
-        publicPath: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'dist/cloudDisk'),
+        publicPath: path.resolve(__dirname, 'dist/cloudDisk')
     },
     optimization: {
         splitChunks: {
@@ -31,6 +33,10 @@ module.exports = {
         new MiniCssExtractPlugin({      //对css进行打包，webpack4推荐语法
             filename: "[name].css",
             chunkFilename: "[name].css"
+        }),
+        //  使用DefinePlugin定义变量的时候，一定要stringfy,否则打包后会理解为变量而不是字符串
+        new webpack.DefinePlugin({
+            'ENVIRONMENT': JSON.stringify(isDev ? 'DEV' : 'PRO')
         }),
         // new BundleAnalyzerPlugin({
         //     analyzerPort: 8899
@@ -134,6 +140,5 @@ module.exports = {
             '.ts', '.tsx', '.js', '.json'
         ]
     },
-    mode:"development",
-    //  mode:"production",
+    mode: isDev ? "development" : "production",
 }
