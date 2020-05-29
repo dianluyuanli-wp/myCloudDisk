@@ -1,3 +1,4 @@
 .awcache
 node_modules
 dist
+sensitiveInfo.tsx

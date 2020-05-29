@@ -1,6 +1,7 @@
 import { netModel, writeCookie, parseCookie, getYearMonthDate } from 'xiaohuli-package';
 import { notification } from 'antd';
 import { extend } from 'umi-request';
+import { remoteIP } from '../sensitiveInfo';
 
 export const apiMap = {
     TEST: 'test',
@@ -11,7 +12,7 @@ export const apiMap = {
     DELETE_FILE: 'deleteFile'
 }
 
-const localHost = ENVIRONMENT === 'DEV' ? 'http://localhost:4000/api/' : 'http://149.129.83.246/api/';
+const localHost = ENVIRONMENT === 'DEV' ? 'http://localhost:4000/api/' : remoteIP;
 export const host = localHost;
 
 export const post = async function(apiName: string, props: object) {
