@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useEffect, useReducer } from 'react';
 import * as s from './index.css';
 import withStyles from 'isomorphic-style-loader/withStyles';
 import { Button, Form, Input, message } from 'antd';

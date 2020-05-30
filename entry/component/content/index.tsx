@@ -126,11 +126,13 @@ function ShowComponent() {
     async function downloadFile() {
         fileList.filter(item => chekcList.findIndex(sitem => item._id === sitem) >= 0)
         .map(item => item.downloadUrl).map(item => {
-            const res = download(item);
-            if (res !== true) {
-                //  跨域错误无法捕获，如果返回不是true的话就走另外一个方法
-                downloadUrlFile(item)
-            }
+            downloadUrlFile(item)
+            //  download.js 针对含有中文名的路径会有问题，因为archor中会转码
+            // const res = download(item);
+            // if (res !== true) {
+            //     //  跨域错误无法捕获，如果返回不是true的话就走另外一个方法
+            //     downloadUrlFile(item)
+            // }
         });
     }
 
