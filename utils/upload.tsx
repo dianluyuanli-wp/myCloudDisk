@@ -19,15 +19,6 @@ function createFileChunk(file: File | Blob | undefined, size = SIZE) {
     return fileChunkList;
 }
 
-export function getBase64(file: File | Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result?.toString());
-    reader.onerror = error => reject(error);
-  });
-}
-
 interface FileObj extends File {
     name: string;
 }

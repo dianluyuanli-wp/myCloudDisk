@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import * as s from './color.css';
 import withStyles from 'isomorphic-style-loader/withStyles';
 import { Layout, Upload, Card, Button, message, Table, Progress, Spin } from 'antd';
