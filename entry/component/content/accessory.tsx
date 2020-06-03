@@ -80,6 +80,7 @@ export const columns = [
       title: 'downloadUrl',
       dataIndex: 'downloadUrl',
       key: 'downloadUrl',
+      render: (text: string) => text.replace('https://7465-test-container-ojiv6-1301135971.tcb.qcloud.la', '云存储cdn前缀地址')
     },
     {
         title: '文件大小',

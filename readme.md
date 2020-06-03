@@ -2,7 +2,7 @@
 1 、安装 npm i  
 2、在根目录下创建文件`sensitiveInfo.tsx`，内容为：  
 ```js
-export const remoteIP = '你的后端服务的远端ip';
+export const remoteIP = 'http://你的后端服务的外网ip/api/';
 ```
 仅在本地调试时可忽略此步骤  
 npm run start dev 启动服务，链接本地开启的服务  
