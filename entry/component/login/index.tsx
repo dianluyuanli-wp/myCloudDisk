@@ -21,8 +21,8 @@ function Login() {
         });
         if (res.verifyResult) {
             localStorage.setItem('tk', res.accessToken);
-            history.replace('/cloudDisk/disk.html');
-            //  window.location.href='/cloudDisk/disk.html';
+            history.replace('/cloudDisk/index.html');
+            //  window.location.href='/cloudDisk/index.html';
         } else {
             message.error('密码错误!');
         }

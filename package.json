@@ -1,10 +1,11 @@
 {
     "name": "iso-style",
-    "version": "0.0.0",
+    "version": "0.0.4",
     "scripts": {
         "start": "node ./bin/start",
         "dev": "nodemon ./bin/start",
         "build": "webpack --color --config webpack.config.js",
+        "deploy": "npm run build && node writeHtml.js",
         "rx": "babel-node ./bin/start",
         "wh": "node ./dist/"
     },

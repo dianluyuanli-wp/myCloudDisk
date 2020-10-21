@@ -38,6 +38,11 @@ module.exports = {
         new webpack.DefinePlugin({
             'ENVIRONMENT': JSON.stringify(isDev ? 'DEV' : 'PRO')
         }),
+        //  moment包太大了，只使用中文包
+        new webpack.ContextReplacementPlugin(
+            /moment[/\\]locale$/,
+            /zh-cn/,
+        ),
         // new BundleAnalyzerPlugin({
         //     analyzerPort: 8899
         // })
