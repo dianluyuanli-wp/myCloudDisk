@@ -23,7 +23,6 @@ ReactDom.render(
     <StyleContext.Provider value={{ insertCss }}>
       <Router>
         <Switch>
-          <Route path='/cloudDisk/login.html' component={Login} />
           <Route path='/cloudDisk/index.html' component={Com} />
           <Route path='/cloudDisk/' component={Login} />  
         </Switch>
