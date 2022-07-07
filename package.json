@@ -20,7 +20,7 @@
         "express": "^4.16.4",
         "http-errors": "^1.6.2",
         "isomorphic-style-loader": "^5.1.0",
-        "moment": "2.24.0",
+        "moment": "2.29.4",
         "morgan": "^1.9.1",
         "react": "^16.8.3",
         "react-dom": "^16.8.3",
