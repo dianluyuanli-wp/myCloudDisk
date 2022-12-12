@@ -17,7 +17,7 @@
         "antd": "^4.1.1",
         "compression": "^1.7.4",
         "ejs": "^2.4.1",
-        "express": "^4.16.4",
+        "express": "^4.17.3",
         "http-errors": "^1.6.2",
         "isomorphic-style-loader": "^5.1.0",
         "moment": "2.24.0",
